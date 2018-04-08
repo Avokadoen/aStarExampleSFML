@@ -23,7 +23,7 @@ TileMap::TileMap(){
 
 			if(i > 0 && j > 0 && i <= NUM_OF_TILES && j <= NUM_OF_TILES){
 				map[i][j].traversable = true;
-				map[i][j].h = sqrt(pow(i - goal.x, 2) + pow(j - goal.y, 2));
+				map[i][j].h = sqrt((pow(i - goal.x, 2) + pow(j - goal.y, 2)));
 			}
 		}
 	}
@@ -67,23 +67,26 @@ void TileMap::update(){
 		for (int i = 0; i < 4; i++) {
 			sf::Vector2i nb = current + nbIndex[i];
 			// if tile(nb) is non-traversable or closed - ignore
-			if(!tile(nb).traversable){
+			if(!tile(nb).traversable || tile(nb).closed){
 
 			}
-			else if(!tile(nb).closed){
-				sf::sleep(sf::milliseconds(10));
-				std::cout << "\n" << tile(nb).g << " " << (tile(current).g + COST);
-				if(tile(nb).g > (tile(current).g + COST)){
-					tile(nb).g = tile(current).g + COST;
-					tile(nb).f = tile(nb).g + tile(nb).h;
-					tile(nb).parent = current;
-					std::cout << "\nf: " << tile(nb).f << "\n";
-					std::cout << map[nb.x][nb.y].parent.x << " " << map[nb.x][nb.y].parent.y;
+			else{
+				if(!tile(nb).open){
+					tile(nb).open = true;
+					openList.push_back(nb);
 				}
-			}
-			if(!tile(nb).closed && !tile(nb).open){
-				tile(nb).open = true;
-				openList.push_back(nb);
+				if(tile(nb).open){
+					//sf::sleep(sf::milliseconds(10));
+					std::cout << "\n" << tile(nb).g << " " << (tile(current).g + COST);
+					if(tile(nb).g > (tile(current).g + COST)){
+						tile(nb).g = tile(current).g + COST;
+						tile(nb).f = tile(nb).g + tile(nb).h;
+						tile(nb).parent = current;
+						std::cout << "\nf: " << tile(nb).h << "\n";
+						std::cout << "\nf: " << tile(nb).f << "\n";
+						std::cout << map[nb.x][nb.y].parent.x << " " << map[nb.x][nb.y].parent.y;
+					}
+				}
 			}
 			// start får aldri gitt verdier
 
@@ -130,7 +133,7 @@ void TileMap::draw(sf::RenderTarget& w){
 		//	std::cout << tile(current).parent.x << " " << tile(current).parent.y;
 
 			current = tile(current).parent;
-			current = start;
+			//current = start;
 		}
 	}
 }
@@ -143,7 +146,7 @@ void TileMap::restartAstar(){
 			map[i][j].open = false;
 			map[i][j].closed = false;
 			map[i][j].g = 99999;
-			map[i][j].f = 99999;
+			map[i][j].f = 999999;
 		}
 	}
 

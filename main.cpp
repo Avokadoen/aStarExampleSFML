@@ -18,7 +18,7 @@ int main()
                 window.close();
 			}
 
-			if (event.type == sf::Event::MouseButtonPressed){
+		/*	if (event.type == sf::Event::MouseButtonPressed){
 				sf::Vector2i mousePos = sf::Mouse::getPosition(window);
 				// adjust to indices on tileMap
 				if(mousePos.x <= ((NUM_OF_TILES) * tileMap.tileSize) && mousePos.x > tileMap.tileSize &&
@@ -34,6 +34,26 @@ int main()
 					tileMap.tile(mousePos).traversable = !tileMap.tile(mousePos).traversable;
 				}
 
+			}*/
+            if (event.type == sf::Event::MouseButtonPressed){
+                if (event.mouseButton.button == sf::Mouse::Left)
+                {
+
+    				sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+    				// adjust to indices on tileMap
+    				if(mousePos.x <= ((NUM_OF_TILES) * tileMap.tileSize) && mousePos.x > tileMap.tileSize &&
+    					mousePos.y <= ((NUM_OF_TILES) * tileMap.tileSize) && mousePos.y > tileMap.tileSize)
+    				{
+    					mousePos.x = (mousePos.x + tileMap.tileSize / 2) / tileMap.tileSize;
+    					mousePos.y = (mousePos.y + tileMap.tileSize / 2) / tileMap.tileSize;
+
+    					// This implementation allows for changing tiles outside the
+    					// interior of the tileMap. Rewrite so that only the interior
+    					// can be changed.
+
+    					tileMap.tile(mousePos).traversable = !tileMap.tile(mousePos).traversable;
+    				}
+                }
 			}
 		}
 
