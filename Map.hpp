@@ -1,6 +1,5 @@
 #pragma once
 
-// { return map[index.x][index.y]; }
 #include <SFML/Graphics.hpp>
 #include "globals.hpp"
 
